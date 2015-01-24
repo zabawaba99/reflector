@@ -4,12 +4,11 @@
 [![Coverage Status](https://coveralls.io/repos/zabawaba99/reflector/badge.svg?branch=master)](https://coveralls.io/r/zabawaba99/reflector?branch=master)
 
 ---
-## Purpose
 
-Built with the intention of making reflective programming simpler.
+Making reflective programming simpler.
 
 ##### Under Development
-The api/code may or may not change radically within the next upcomming weeks. 
+The API may or may not change radically within the next upcoming weeks. 
 
 ## Usage
 
@@ -17,7 +16,7 @@ The api/code may or may not change radically within the next upcomming weeks.
 
 Add the snapshot repository and the dependency to you pom.xml file
 
-```
+```xml
 <repositories>
 	<repository>
 		<id>reflector-mvn-repo</id>
