@@ -1,6 +1,7 @@
 # Reflector
 ---
 [![Build Status](https://travis-ci.org/zabawaba99/reflector.svg?branch=master)](https://travis-ci.org/zabawaba99/reflector)
+[![Coverage Status](https://coveralls.io/repos/zabawaba99/reflector/badge.svg?branch=master)](https://coveralls.io/r/zabawaba99/reflector?branch=master)
 
 ---
 ## Purpose
