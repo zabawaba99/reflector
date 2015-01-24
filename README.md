@@ -1,5 +1,8 @@
 # Reflector
+---
+[![Build Status](https://travis-ci.org/zabawaba99/reflector.svg?branch=master)](https://travis-ci.org/zabawaba99/reflector)
 
+---
 ## Purpose
 
 Built with the intention of making reflective programming simpler.
