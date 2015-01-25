@@ -13,17 +13,21 @@ import java.util.HashSet;
 public class ReflectionUtil {
 
 	/**
-	 * Gets all methods for the given class and all of its superclasses
+	 * Gets all {@link Method}s for the given class and all of its superclasses.
 	 * 
 	 * @param clazz
-	 * @return A {@link HashSet} containing all of the 
-	 * methods that the given class ( and its superclasses ) has.
+	 * @return A {@link HashSet} containing all of the methods that the given class ( and its superclasses ) has.
+	 * <br><br>
+	 * All of the methods returned have had {@link Method#setAccessible(boolean)} called on them.
 	 */
 	public static HashSet<Method> getMethods(Class<?> clazz) {
 		HashSet<Method> methods = new HashSet<Method>();
 		Class<?> callingClass = clazz;
 		while( callingClass != null ) {
-			methods.addAll(Arrays.asList(callingClass.getMethods()));
+			for(Method m : callingClass.getMethods()) {
+				m.setAccessible(true);
+				methods.add(m);
+			}
 			callingClass = callingClass.getSuperclass();
 		}
 		return methods;
