@@ -11,15 +11,26 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<github.global.server>github</github.global.server>
 	</properties>
+
+	<licenses>
+		<license>
+			<name>MIT License</name>
+			<url>http://www.opensource.org/licenses/mit-license.php</url>
+		</license>
+	</licenses>
 
 	<scm>
 		<url>https://github.com/zabawaba99/reflector</url>
 	</scm>
 	<issueManagement>
 		<url>https://github.com/zabawaba99/reflector/issues</url>
+		<system>GitHub</system>
 	</issueManagement>
+	<ciManagement>
+		<system>Travis Ci</system>
+		<url>https://travis-ci.org/zabawaba99/reflector</url>
+	</ciManagement>
 
 	<dependencies>
 		<dependency>
@@ -108,9 +119,9 @@
 						</executions>
 					</plugin>
 					<!-- used for auto release from staging to maven central -->
-					<!-- <plugin> <groupId>org.sonatype.plugins</groupId> <artifactId>nexus-staging-maven-plugin</artifactId>
-						<version>1.6.3</version> <extensions>true</extensions> <configuration> <serverId>ossrh</serverId>
-						<nexusUrl>https://oss.sonatype.org/</nexusUrl> <autoReleaseAfterClose>true</autoReleaseAfterClose>
+					<!-- <plugin> <groupId>org.sonatype.plugins</groupId> <artifactId>nexus-staging-maven-plugin</artifactId> 
+						<version>1.6.3</version> <extensions>true</extensions> <configuration> <serverId>ossrh</serverId> 
+						<nexusUrl>https://oss.sonatype.org/</nexusUrl> <autoReleaseAfterClose>true</autoReleaseAfterClose> 
 						</configuration> </plugin> -->
 				</plugins>
 			</build>
