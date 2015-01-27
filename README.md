@@ -19,11 +19,10 @@ Add the snapshot repository and the dependency to you pom.xml file
 ```xml
 <repositories>
 	<repository>
-		<id>reflector-mvn-repo</id>
-		<url>https://raw.github.com/zabawaba99/reflector/mvn-repo/</url>
+		<id>sonatype-snapshot</id>
+		<url>https://oss.sonatype.org/content/groups/public</url>
 		<snapshots>
 			<enabled>true</enabled>
-			<updatePolicy>always</updatePolicy>
 		</snapshots>
 	</repository>
 </repositories>
@@ -43,8 +42,7 @@ Coming soon
 
 ### Manual install
 
-For the time being, you can download the jar in [mvn-repo](https://github.com/zabawaba99/reflector/tree/mvn-repo/com/zabawaba99/reflector) 
-branch and add the jar to your project's classpath.
+You can go to the [sonatype repository](https://oss.sonatype.org/content/groups/public/com/github/zabawaba99/reflector/) and download the version of reflector that you're interested in using.
 
 ---
 
