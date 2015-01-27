@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.zabawaba99</groupId>
+	<groupId>com.github.zabawaba99</groupId>
 	<artifactId>reflector</artifactId>
 	<version>0.1.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
@@ -11,15 +11,26 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<github.global.server>github</github.global.server>
 	</properties>
+
+	<licenses>
+		<license>
+			<name>MIT License</name>
+			<url>http://www.opensource.org/licenses/mit-license.php</url>
+		</license>
+	</licenses>
 
 	<scm>
 		<url>https://github.com/zabawaba99/reflector</url>
 	</scm>
 	<issueManagement>
 		<url>https://github.com/zabawaba99/reflector/issues</url>
+		<system>GitHub</system>
 	</issueManagement>
+	<ciManagement>
+		<system>Travis Ci</system>
+		<url>https://travis-ci.org/zabawaba99/reflector</url>
+	</ciManagement>
 
 	<dependencies>
 		<dependency>
@@ -31,23 +42,15 @@
 	</dependencies>
 
 	<distributionManagement>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
 		<repository>
-			<id>internal.repo</id>
-			<name>Temporary Staging Repository</name>
-			<url>file://${project.build.directory}/mvn-repo</url>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 		</repository>
 	</distributionManagement>
-
-	<repositories>
-		<repository>
-			<id>reflectorE-mvn-repo</id>
-			<url>https://raw.github.com/zabawaba99/reflector/mvn-repo/</url>
-			<snapshots>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-			</snapshots>
-		</repository>
-	</repositories>
 
 	<build>
 		<plugins>
@@ -67,40 +70,61 @@
 					<aggregate>true</aggregate>
 				</configuration>
 			</plugin>
-			<plugin>
-				<artifactId>maven-deploy-plugin</artifactId>
-				<version>2.8.1</version>
-				<configuration>
-					<altDeploymentRepository>internal.repo::default::file://${project.build.directory}/mvn-repo</altDeploymentRepository>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>com.github.github</groupId>
-				<artifactId>site-maven-plugin</artifactId>
-				<version>0.10</version>
-				<configuration>
-					<message>Maven artifacts for ${project.version}</message>
-					<noJekyll>true</noJekyll>
-					<outputDirectory>${project.build.directory}/mvn-repo</outputDirectory>
-					<branch>refs/heads/mvn-repo</branch>
-					<includes>
-						<include>**/*</include>
-					</includes>
-					<merge>true</merge>
-					<repositoryName>reflector</repositoryName>
-					<repositoryOwner>zabawaba99</repositoryOwner>
-				</configuration>
-				<executions>
-					<!-- run site-maven-plugin's 'site' target as part of the build's normal
-						'deploy' phase -->
-					<execution>
-						<goals>
-							<goal>site</goal>
-						</goals>
-						<phase>deploy</phase>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
 	</build>
+
+	<profiles>
+		<profile>
+			<id>release</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-source-plugin</artifactId>
+						<version>2.2.1</version>
+						<executions>
+							<execution>
+								<id>attach-sources</id>
+								<goals>
+									<goal>jar-no-fork</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<version>2.9.1</version>
+						<executions>
+							<execution>
+								<id>attach-javadocs</id>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<version>1.5</version>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<!-- used for auto release from staging to maven central -->
+					<!-- <plugin> <groupId>org.sonatype.plugins</groupId> <artifactId>nexus-staging-maven-plugin</artifactId> 
+						<version>1.6.3</version> <extensions>true</extensions> <configuration> <serverId>ossrh</serverId> 
+						<nexusUrl>https://oss.sonatype.org/</nexusUrl> <autoReleaseAfterClose>true</autoReleaseAfterClose> 
+						</configuration> </plugin> -->
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>
