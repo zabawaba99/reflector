@@ -35,7 +35,7 @@ public class ReflectionUtil {
 	}
 
 	/**
-	 * Get a method with the given name in the given class.
+	 * Get a method with the specified name in the given class.
 	 * 
 	 * @param clazz
 	 *            Class to fetch method from
@@ -77,6 +77,25 @@ public class ReflectionUtil {
 			currentClass = currentClass.getSuperclass();
 		}
 		return methods;
+	}
+
+	/**
+	 * Get a field with the specified name in the given class
+	 * 
+	 * @param clazz
+	 *            Class to fetch field from
+	 * @param name
+	 *            Name of the field to get
+	 * @return A field that matches the provided name, {@code null} if there is
+	 *         no field with said name.
+	 */
+	public static Field getField(Class<?> clazz, String name) {
+		for (Field field : getFields(clazz)) {
+			if (field.getName().equals(name)) {
+				return field;
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -135,27 +154,23 @@ public class ReflectionUtil {
 		if (obj == null) {
 			return null;
 		}
-
-		HashSet<Field> fields = getFields(obj.getClass());
-		for (Field field : fields) {
-			if (field.getName().equals(name)) {
-				try {
-					return field.get(obj);
-				} catch (IllegalArgumentException e) {
-					/*
-					 * object is not an instance of the class that was used to
-					 * fetch the field.
-					 * 
-					 * this should never happen since obj.getClass() was the
-					 * class used to fetch the field
-					 */
-					// TODO: error handling
-				} catch (IllegalAccessException e) {
-					// should not happen since the field object is manually
-					// being set to accessible
-					// TODO: error handling
-				}
-				break;
+		Field field = getField(obj.getClass(), name);
+		if (field != null) {
+			try {
+				return field.get(obj);
+			} catch (IllegalArgumentException e) {
+				/*
+				 * object is not an instance of the class that was used to fetch
+				 * the field.
+				 * 
+				 * this should never happen since obj.getClass() was the class
+				 * used to fetch the field
+				 */
+				// TODO: error handling
+			} catch (IllegalAccessException e) {
+				// should not happen since the field object is manually
+				// being set to accessible
+				// TODO: error handling
 			}
 		}
 		return null;
