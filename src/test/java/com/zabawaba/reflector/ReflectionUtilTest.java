@@ -69,6 +69,19 @@ public class ReflectionUtilTest {
 	}
 
 	@Test
+	public void testGetField() throws IllegalArgumentException, IllegalAccessException {
+		Field field = ReflectionUtil.getField(SampleOne.class, "field1");
+		assertNotNull(field);
+
+		String example = "foo";
+		SampleOne sample = new SampleOne();
+		sample.field1 = example;
+
+		String value = (String) field.get(sample);
+		assertEquals(example, value);
+	}
+
+	@Test
 	public void testGetFields() {
 		HashSet<Field> fields = ReflectionUtil.getFields(SampleOne.class);
 		assertEquals(3, fields.size());
