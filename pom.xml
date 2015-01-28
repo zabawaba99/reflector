@@ -63,12 +63,6 @@
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>cobertura-maven-plugin</artifactId>
 				<version>2.6</version>
-				<configuration>
-					<format>xml</format>
-					<maxmem>256m</maxmem>
-					<!-- aggregated reports for multi-module projects -->
-					<aggregate>true</aggregate>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>
@@ -123,6 +117,24 @@
 						<version>1.6.3</version> <extensions>true</extensions> <configuration> <serverId>ossrh</serverId> 
 						<nexusUrl>https://oss.sonatype.org/</nexusUrl> <autoReleaseAfterClose>true</autoReleaseAfterClose> 
 						</configuration> </plugin> -->
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>coverall</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>cobertura-maven-plugin</artifactId>
+						<version>2.6</version>
+						<configuration>
+							<format>xml</format>
+							<maxmem>256m</maxmem>
+							<!-- aggregated reports for multi-module projects -->
+							<aggregate>true</aggregate>
+						</configuration>
+					</plugin>
 				</plugins>
 			</build>
 		</profile>
