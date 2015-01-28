@@ -5,8 +5,7 @@ import java.lang.reflect.Method;
 import java.util.HashSet;
 
 /**
- * A utility that provides a different interface
- * for reflection.
+ * A utility that provides a different interface for reflection.
  * 
  * @author zabawaba
  */
@@ -16,15 +15,18 @@ public class ReflectionUtil {
 	 * Gets all {@link Method}s for the given class and all of its superclasses.
 	 * 
 	 * @param clazz
-	 * @return A {@link HashSet} containing all of the methods that the given class ( and its superclasses ) has.
-	 * <br><br>
-	 * All of the methods returned have had {@link Method#setAccessible(boolean)} called on them.
+	 *            Class to fetch methods from
+	 * @return A {@link HashSet} containing all of the methods that the given
+	 *         class ( and its superclasses ) has. <br>
+	 * <br>
+	 *         All of the methods returned have had
+	 *         {@link Method#setAccessible(boolean)} called on them.
 	 */
 	public static HashSet<Method> getMethods(Class<?> clazz) {
 		HashSet<Method> methods = new HashSet<Method>();
 		Class<?> currentClass = clazz;
-		while( currentClass != null ) {
-			for(Method m : currentClass.getMethods()) {
+		while (currentClass != null) {
+			for (Method m : currentClass.getMethods()) {
 				m.setAccessible(true);
 				methods.add(m);
 			}
@@ -32,25 +34,86 @@ public class ReflectionUtil {
 		}
 		return methods;
 	}
-	
+
 	/**
 	 * Gets all {@link Field}s for the given class and all of its superclasses.
 	 * 
 	 * @param clazz
-	 * @return A {@link HashSet} containing all of the fields that the given class ( and its superclasses ) has.
-	 * <br><br>
-	 * All of the fields returned have had {@link Field#setAccessible(boolean)} called on them.
+	 *            Class to fetch fields from
+	 * @return A {@link HashSet} containing all of the fields that the given
+	 *         class ( and its superclasses ) has. <br>
+	 * <br>
+	 *         All of the fields returned have had
+	 *         {@link Field#setAccessible(boolean)} called on them.
 	 */
 	public static HashSet<Field> getFields(Class<?> clazz) {
 		HashSet<Field> fields = new HashSet<Field>();
 		Class<?> currentClass = clazz;
-		while( currentClass != null ) {
-			for(Field f : currentClass.getFields()) {
-				f.setAccessible(true);
-				fields.add(f);
+		while (currentClass != null) {
+			try {
+			for (Field f : currentClass.getDeclaredFields()) {
+				try {
+					f.setAccessible(true);
+					fields.add(f);
+				} catch (SecurityException e) { 
+					// TODO: error handling
+				}
+			}
+			} catch (SecurityException e){
+				// TODO: error handling
 			}
 			currentClass = currentClass.getSuperclass();
 		}
 		return fields;
+	}
+
+	/**
+	 * Find a field with the given name in the given object and returns fields
+	 * value
+	 * 
+	 * @param <T>
+	 *            Type of the requested field's value
+	 * @param obj
+	 *            Object to find the field in
+	 * @param name
+	 *            Name of the field to look for
+	 * @return The value of the field with the given name. <br>
+	 *         {@code null} will be returned if:
+	 *         <ul>
+	 *         <li>The given object is null</li>
+	 *         <li>The requested field does not exist in the object</li>
+	 *         <li>The requested field is not Public and there is a
+	 *         {@link SecurityManager} in place/</li>
+	 *         <li>The value of the found field is not the same type as T</li>
+	 *         </ul>
+	 */
+	public static Object getFieldValue(Object obj, String name) {
+		if (obj == null) {
+			return null;
+		}
+		
+		HashSet<Field> fields = getFields(obj.getClass());
+		for(Field field : fields) {
+			if (field.getName().equals(name)) {
+				try {
+					return field.get(obj);
+				} catch (IllegalArgumentException e) {
+					/*
+					 * object is not an instance of the class that was used to fetch the
+					 * field.
+					 * 
+					 * this should never happen since obj.getClass() was the class used
+					 * to fetch the field
+					 */
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					// should not happen since the field object is manually
+					// being set to accessible
+					e.printStackTrace();
+				}
+				break;
+			}
+		}
+		return null;
 	}
 }
