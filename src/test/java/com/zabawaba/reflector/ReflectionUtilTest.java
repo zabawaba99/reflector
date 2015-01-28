@@ -34,7 +34,7 @@ public class ReflectionUtilTest {
 	@Test
 	public void testGetFields() {
 		HashSet<Field> fields = ReflectionUtil.getFields(SampleOne.class);
-		assertEquals(2, fields.size());
+		assertEquals(3, fields.size());
 	}
 
 	@Test

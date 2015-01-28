@@ -50,9 +50,17 @@ public class ReflectionUtil {
 		HashSet<Field> fields = new HashSet<Field>();
 		Class<?> currentClass = clazz;
 		while (currentClass != null) {
-			for (Field f : currentClass.getFields()) {
-				f.setAccessible(true);
-				fields.add(f);
+			try {
+			for (Field f : currentClass.getDeclaredFields()) {
+				try {
+					f.setAccessible(true);
+					fields.add(f);
+				} catch (SecurityException e) { 
+					// TODO: error handling
+				}
+			}
+			} catch (SecurityException e){
+				// TODO: error handling
 			}
 			currentClass = currentClass.getSuperclass();
 		}
@@ -83,31 +91,28 @@ public class ReflectionUtil {
 		if (obj == null) {
 			return null;
 		}
-
-		try {
-			Field field = obj.getClass().getField(name);
-			field.setAccessible(true);
-			return field.get(obj);
-		} catch (NoSuchFieldException e) {
-			// field doesn't exist in object
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			// there is a security manager in place that
-			// doesn't allow for access to private fields
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			/*
-			 * object is not an instance of the class that was used to fetch the
-			 * field.
-			 * 
-			 * this should never happen since obj.getClass() was the class used
-			 * to fetch the field
-			 */
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// should not happen since the field object is manually
-			// being set to accessible
-			e.printStackTrace();
+		
+		HashSet<Field> fields = getFields(obj.getClass());
+		for(Field field : fields) {
+			if (field.getName().equals(name)) {
+				try {
+					return field.get(obj);
+				} catch (IllegalArgumentException e) {
+					/*
+					 * object is not an instance of the class that was used to fetch the
+					 * field.
+					 * 
+					 * this should never happen since obj.getClass() was the class used
+					 * to fetch the field
+					 */
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					// should not happen since the field object is manually
+					// being set to accessible
+					e.printStackTrace();
+				}
+				break;
+			}
 		}
 		return null;
 	}
