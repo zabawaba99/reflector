@@ -53,4 +53,56 @@ public class ReflectionUtil {
 		}
 		return fields;
 	}
+	
+	/**
+	 * Find a field with the given name in the given object and returns
+	 * fields value
+	 * 
+	 * @param <T> Type of the requested field's value
+	 * @param obj Object to find the field in
+	 * @param name Name of the field to look for
+	 * @return The value of the field with the given name. 
+	 * <br>
+	 * {@code null} will be returned if:
+	 * <ul>
+	 * <li>The given object is null</li>
+	 * <li>The requested field does not exist in the object</li>
+	 * <li>The requested field is not Public and there is a {@link SecurityManager} in place/</li>
+	 * <li>The value of the found field is not the same type as T</li>
+	 * </ul>
+	 */
+	public static Object getFieldValue(Object obj, String name) {
+		if (obj == null) {
+			return null;
+		}
+				
+		try {
+			Field field = obj.getClass().getField(name);
+			field.setAccessible(true);
+			return field.get(obj); 
+		} catch (NoSuchFieldException e) {
+			// field doesn't exist in object
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// there is a security manager in place that 
+			// doesn't allow for access to private fields
+			e.printStackTrace();
+		} catch (ClassCastException e) {
+			// field is not of type T
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			/* 
+			 * object is not an instance of the class that was used to fetch the field.
+			 * 
+			 * this should never happen since obj.getClass() was the class used to 
+			 * fetch the field
+			 */
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// should not happen since the field object is manually
+			// being set to accessible
+			e.printStackTrace();
+		}
+		return null;
+	}
 }

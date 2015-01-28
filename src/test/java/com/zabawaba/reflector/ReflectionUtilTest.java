@@ -1,6 +1,7 @@
 package com.zabawaba.reflector;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -43,5 +44,35 @@ public class ReflectionUtilTest {
 		HashSet<Field> fields = ReflectionUtil.getFields(SampleOne.class);
 		assertEquals(2, fields.size());
 	}
-
+	
+	@Test
+	public void testGetFieldValue() {
+		String expected = "foo";
+		SampleOne sample = new SampleOne();
+		sample.field1 = expected;
+		Object value = ReflectionUtil.getFieldValue(sample, "field1");
+		assertEquals(expected, value);
+	}
+	
+	@Test
+	public void testGetFieldValue_NullObject() {
+		Object value = ReflectionUtil.getFieldValue(null, "foo");
+		assertNull(value);
+	}
+	
+	@Test
+	public void testGetFieldValue_MissingField() {
+		SampleOne sample = new SampleOne();
+		Object value = ReflectionUtil.getFieldValue(sample, "missing");
+		assertNull(value);
+	}
+	
+	@Test
+	public void testGetFieldValue_SecurityManager() {
+		SecurityManager m = new SecurityManager();
+		System.setSecurityManager(m);
+		SampleOne sample = new SampleOne();
+		Object value = ReflectionUtil.getFieldValue(sample, "field3");
+		assertNull(value);
+	}
 }
