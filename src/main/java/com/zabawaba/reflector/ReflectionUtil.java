@@ -2,6 +2,7 @@ package com.zabawaba.reflector;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.HashSet;
 
 /**
@@ -10,6 +11,49 @@ import java.util.HashSet;
  * @author zabawaba
  */
 public class ReflectionUtil {
+
+	/**
+	 * Get a method with the given name in the given class. If the method you
+	 * are looking for is overloaded, you may not get the method you expect. If
+	 * you are looking for a particular overloaded method, you should use
+	 * {@link #getMethod(Class, String, Class...)}
+	 * 
+	 * @param clazz
+	 *            Class to fetch method from
+	 * @param name
+	 *            The name of the method to return
+	 * @return A method that matches the provided name, {@code null} if there is
+	 *         no method with said name.
+	 */
+	public static Method getMethod(Class<?> clazz, String name) {
+		for (Method m : getMethods(clazz)) {
+			if (m.getName().equals(name)) {
+				return m;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Get a method with the given name in the given class.
+	 * 
+	 * @param clazz
+	 *            Class to fetch method from
+	 * @param name
+	 *            The name of the method to return
+	 * @param params
+	 *            The params of the method to return
+	 * @return A method that matches the provided name, {@code null} if there is
+	 *         no method with said name.
+	 */
+	public static Method getMethod(Class<?> clazz, String name, Class<?>... params) {
+		for (Method m : getMethods(clazz)) {
+			if (m.getName().equals(name) && Arrays.equals(m.getParameterTypes(), params)) {
+				return m;
+			}
+		}
+		return null;
+	}
 
 	/**
 	 * Gets all {@link Method}s for the given class and all of its superclasses.
@@ -26,7 +70,7 @@ public class ReflectionUtil {
 		HashSet<Method> methods = new HashSet<Method>();
 		Class<?> currentClass = clazz;
 		while (currentClass != null) {
-			for (Method m : currentClass.getMethods()) {
+			for (Method m : currentClass.getDeclaredMethods()) {
 				m.setAccessible(true);
 				methods.add(m);
 			}
@@ -51,15 +95,15 @@ public class ReflectionUtil {
 		Class<?> currentClass = clazz;
 		while (currentClass != null) {
 			try {
-			for (Field f : currentClass.getDeclaredFields()) {
-				try {
-					f.setAccessible(true);
-					fields.add(f);
-				} catch (SecurityException e) { 
-					// TODO: error handling
+				for (Field f : currentClass.getDeclaredFields()) {
+					try {
+						f.setAccessible(true);
+						fields.add(f);
+					} catch (SecurityException e) {
+						// TODO: error handling
+					}
 				}
-			}
-			} catch (SecurityException e){
+			} catch (SecurityException e) {
 				// TODO: error handling
 			}
 			currentClass = currentClass.getSuperclass();
@@ -91,25 +135,25 @@ public class ReflectionUtil {
 		if (obj == null) {
 			return null;
 		}
-		
+
 		HashSet<Field> fields = getFields(obj.getClass());
-		for(Field field : fields) {
+		for (Field field : fields) {
 			if (field.getName().equals(name)) {
 				try {
 					return field.get(obj);
 				} catch (IllegalArgumentException e) {
 					/*
-					 * object is not an instance of the class that was used to fetch the
-					 * field.
+					 * object is not an instance of the class that was used to
+					 * fetch the field.
 					 * 
-					 * this should never happen since obj.getClass() was the class used
-					 * to fetch the field
+					 * this should never happen since obj.getClass() was the
+					 * class used to fetch the field
 					 */
-					e.printStackTrace();
+					// TODO: error handling
 				} catch (IllegalAccessException e) {
 					// should not happen since the field object is manually
 					// being set to accessible
-					e.printStackTrace();
+					// TODO: error handling
 				}
 				break;
 			}
