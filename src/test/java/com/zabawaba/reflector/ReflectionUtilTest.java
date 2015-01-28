@@ -1,9 +1,11 @@
 package com.zabawaba.reflector;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashSet;
 
@@ -15,20 +17,55 @@ import com.zabawaba.reflector.classes.SampleOne;
 public class ReflectionUtilTest {
 
 	@Test
+	public void testGetMethod() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		Method m = ReflectionUtil.getMethod(SampleOne.class, "method1");
+		assertNotNull(m);
+
+		String example = "foo";
+		SampleOne sample = new SampleOne();
+		sample.field1 = example;
+
+		String response = (String) m.invoke(sample);
+		assertEquals(example, response);
+	}
+
+	@Test
+	public void testGetMethod_NoMethod() {
+		Method m = ReflectionUtil.getMethod(SampleOne.class, "missing");
+		assertNull(m);
+	}
+
+	@Test
+	public void testGetMethodWithParams() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		Method m = ReflectionUtil.getMethod(SampleOne.class, "override", String.class, String.class);
+		assertNotNull(m);
+
+		SampleOne sample = new SampleOne();
+		int response = (Integer) m.invoke(sample, "", "");
+		assertEquals(2, response);
+	}
+
+	@Test
+	public void testGetMethodWithParams_NoMethod() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		Method m = ReflectionUtil.getMethod(SampleOne.class, "override", String.class, String.class, String.class);
+		assertNull(m);
+	}
+
+	@Test
 	public void testGetMethods() {
 		HashSet<Method> methods = ReflectionUtil.getMethods(SampleOne.class);
 		HashSet<Method> parentMethods = ReflectionUtil.getMethods(Object.class);
 
-		assertEquals(11, methods.size());
-		assertEquals(2, methods.size() - parentMethods.size());
+		assertEquals(16, methods.size());
+		assertEquals(4, methods.size() - parentMethods.size());
 	}
 
 	@Test
 	public void testGetMethods_NoMethodsOnClass() {
 		HashSet<Method> methods = ReflectionUtil.getMethods(Empty.class);
 
-		// there are 9 methods in the object class
-		assertEquals(9, methods.size());
+		// there are 12 methods in the object class
+		assertEquals(12, methods.size());
 	}
 
 	@Test

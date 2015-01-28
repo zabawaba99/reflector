@@ -6,6 +6,8 @@ public class SampleOne {
 	@SuppressWarnings("unused")
 	private float field3;
 
-	public void method1(){}
+	public String method1(){return field1;}
 	public void method2(){}
+	public int override(String param){return 1;}
+	public int override(String param, String param2){ return 2;}
 }
