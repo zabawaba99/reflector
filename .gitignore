@@ -6,4 +6,4 @@
 # Maven
 log/
 target/
-release
+release*

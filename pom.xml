@@ -8,6 +8,15 @@
 	<packaging>jar</packaging>
 
 	<name>reflector</name>
+	<description>Reflection utility meant to make reflective programming easier</description>
+	<url>https://github.com/zabawaba99/reflector</url>
+	
+	<developers>
+		<developer>
+			<name>Steven Berlanga</name>
+			<email>zabawaba99@gmail.com</email>
+		</developer>
+	</developers>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -21,6 +30,8 @@
 	</licenses>
 
 	<scm>
+		<connection>scm:git:git@github.com:zabawaba99/reflector.git</connection>
+		<developerConnection>scm:git:git@github.com:zabawaba99/reflector.git</developerConnection>
 		<url>https://github.com/zabawaba99/reflector</url>
 	</scm>
 	<issueManagement>
@@ -63,6 +74,25 @@
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>cobertura-maven-plugin</artifactId>
 				<version>2.6</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.5</version>
+				<configuration>
+					<autoVersionSubmodules>true</autoVersionSubmodules>
+					<useReleaseProfile>false</useReleaseProfile>
+					<releaseProfiles>release</releaseProfiles>
+					<goals>deploy</goals>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.maven.scm</groupId>
+						<artifactId>maven-scm-provider-gitexe</artifactId>
+						<!-- This version is necessary for use with git version 1.8.5 -->
+						<version>1.8.1</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 		</plugins>
 	</build>
@@ -112,11 +142,6 @@
 							</execution>
 						</executions>
 					</plugin>
-					<!-- used for auto release from staging to maven central -->
-					<!-- <plugin> <groupId>org.sonatype.plugins</groupId> <artifactId>nexus-staging-maven-plugin</artifactId> 
-						<version>1.6.3</version> <extensions>true</extensions> <configuration> <serverId>ossrh</serverId> 
-						<nexusUrl>https://oss.sonatype.org/</nexusUrl> <autoReleaseAfterClose>true</autoReleaseAfterClose> 
-						</configuration> </plugin> -->
 				</plugins>
 			</build>
 		</profile>
