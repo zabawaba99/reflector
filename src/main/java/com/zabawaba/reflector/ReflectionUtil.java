@@ -15,7 +15,7 @@ public class ReflectionUtil {
 
 	/**
 	 * Predefined {@link Filter} where {@link Filter#apply(Object)} will return
-	 * true when given a field whos {@link Modifier}s contain
+	 * true when given a field who's {@link Modifier}s contain
 	 * {@link Modifier#PUBLIC}
 	 */
 	public static Filter<Field> PUBLIC_FIELDS = new Filter<Field>() {
@@ -23,9 +23,25 @@ public class ReflectionUtil {
 			return (field.getModifiers() & Modifier.PUBLIC) == Modifier.PUBLIC;
 		}
 	};
-	
+
+	/**
+	 * Predefined {@link Filter} where {@link Filter#apply(Object)} will return
+	 * true when given a method who's {@link Modifier}s contain
+	 * {@link Modifier#PUBLIC}
+	 */
+	public static Filter<Method> PUBLIC_METHODS = new Filter<Method>() {
+		public boolean apply(Method method) {
+			return (method.getModifiers() & Modifier.PUBLIC) == Modifier.PUBLIC;
+		}
+	};
+
 	private static Filter<Field> ALL_FIELDS = new Filter<Field>() {
 		public boolean apply(Field field) {
+			return true;
+		}
+	};
+	private static Filter<Method> ALL_METHODS = new Filter<Method>() {
+		public boolean apply(Method field) {
 			return true;
 		}
 	};
@@ -87,12 +103,38 @@ public class ReflectionUtil {
 	 *         {@link Method#setAccessible(boolean)} called on them.
 	 */
 	public static HashSet<Method> getMethods(Class<?> clazz) {
+		return getMethods(clazz, ALL_METHODS);
+	}
+
+	/**
+	 * Gets all {@link Method}s for the given class and all of its superclasses
+	 * where {@link Filter#apply(Object)} returns true
+	 * 
+	 * @param clazz
+	 *            Class to fetch methods from
+	 * @param filter
+	 *            The filter that determines whether or not a method is added to
+	 *            the return
+	 * @return A {@link HashSet} containing all of the methods that the given
+	 *         class ( and its superclasses ) has that meet the filtering
+	 *         criteria. <br>
+	 * <br>
+	 *         All of the methods returned have had
+	 *         {@link Field#setAccessible(boolean)} called on them.
+	 */
+	public static HashSet<Method> getMethods(Class<?> clazz, Filter<Method> filter) {
 		HashSet<Method> methods = new HashSet<Method>();
+		if (filter == null) {
+			return methods;
+		}
+
 		Class<?> currentClass = clazz;
 		while (currentClass != null) {
 			for (Method m : currentClass.getDeclaredMethods()) {
 				m.setAccessible(true);
-				methods.add(m);
+				if (filter.apply(m)) {
+					methods.add(m);
+				}
 			}
 			currentClass = currentClass.getSuperclass();
 		}
