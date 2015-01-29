@@ -2,6 +2,7 @@ package com.zabawaba.reflector;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.HashSet;
 
@@ -11,6 +12,25 @@ import java.util.HashSet;
  * @author zabawaba
  */
 public class ReflectionUtil {
+
+	/**
+	 * Predefined {@link Filter} where {@link Filter#apply(Object)} will return
+	 * true when given a field whos {@link Modifier}s contain
+	 * {@link Modifier#PUBLIC}
+	 */
+	public static Filter<Field> PUBLIC_FIELDS = new Filter<Field>() {
+		public boolean apply(Field field) {
+			return (field.getModifiers() & Modifier.PUBLIC) == Modifier.PUBLIC;
+		}
+	};
+	
+	private static Filter<Field> ALL_FIELDS = new Filter<Field>() {
+		public boolean apply(Field field) {
+			return true;
+		}
+	};
+
+	// TODO: handle SecurityExceptions
 
 	/**
 	 * Get a method with the given name in the given class. If the method you
@@ -99,38 +119,6 @@ public class ReflectionUtil {
 	}
 
 	/**
-	 * Gets all {@link Field}s for the given class and all of its superclasses.
-	 * 
-	 * @param clazz
-	 *            Class to fetch fields from
-	 * @return A {@link HashSet} containing all of the fields that the given
-	 *         class ( and its superclasses ) has. <br>
-	 * <br>
-	 *         All of the fields returned have had
-	 *         {@link Field#setAccessible(boolean)} called on them.
-	 */
-	public static HashSet<Field> getFields(Class<?> clazz) {
-		HashSet<Field> fields = new HashSet<Field>();
-		Class<?> currentClass = clazz;
-		while (currentClass != null) {
-			try {
-				for (Field f : currentClass.getDeclaredFields()) {
-					try {
-						f.setAccessible(true);
-						fields.add(f);
-					} catch (SecurityException e) {
-						// TODO: error handling
-					}
-				}
-			} catch (SecurityException e) {
-				// TODO: error handling
-			}
-			currentClass = currentClass.getSuperclass();
-		}
-		return fields;
-	}
-
-	/**
 	 * Find a field with the given name in the given object and returns fields
 	 * value
 	 * 
@@ -174,5 +162,55 @@ public class ReflectionUtil {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Gets all {@link Field}s for the given class and all of its superclasses.
+	 * 
+	 * @param clazz
+	 *            Class to fetch fields from
+	 * @return A {@link HashSet} containing all of the fields that the given
+	 *         class ( and its superclasses ) has. <br>
+	 * <br>
+	 *         All of the fields returned have had
+	 *         {@link Field#setAccessible(boolean)} called on them.
+	 */
+	public static HashSet<Field> getFields(Class<?> clazz) {
+		return getFields(clazz, ALL_FIELDS);
+	}
+
+	/**
+	 * Gets all {@link Field}s for the given class and all of its superclasses
+	 * where {@link Filter#apply(Object)} returns true
+	 * 
+	 * @param clazz
+	 *            Class to fetch fields from
+	 * @param filter
+	 *            The filter that determines whether or not a field is added to
+	 *            the return
+	 * @return A {@link HashSet} containing all of the fields that the given
+	 *         class ( and its superclasses ) has that meet the filtering
+	 *         criteria. <br>
+	 * <br>
+	 *         All of the fields returned have had
+	 *         {@link Field#setAccessible(boolean)} called on them.
+	 */
+	public static HashSet<Field> getFields(Class<?> clazz, Filter<Field> filter) {
+		HashSet<Field> fields = new HashSet<Field>();
+		if (filter == null) {
+			return fields;
+		}
+
+		Class<?> currentClass = clazz;
+		while (currentClass != null) {
+			for (Field f : currentClass.getDeclaredFields()) {
+				f.setAccessible(true);
+				if (filter.apply(f)) {
+					fields.add(f);
+				}
+			}
+			currentClass = currentClass.getSuperclass();
+		}
+		return fields;
 	}
 }

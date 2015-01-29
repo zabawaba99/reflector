@@ -72,7 +72,7 @@ public class ReflectionUtilTest {
 	public void testGetField() throws IllegalArgumentException, IllegalAccessException {
 		Field field = ReflectionUtil.getField(SampleOne.class, "field1");
 		assertNotNull(field);
-
+		
 		String example = "foo";
 		SampleOne sample = new SampleOne();
 		sample.field1 = example;
@@ -80,21 +80,7 @@ public class ReflectionUtilTest {
 		String value = (String) field.get(sample);
 		assertEquals(example, value);
 	}
-
-	@Test
-	public void testGetFields() {
-		HashSet<Field> fields = ReflectionUtil.getFields(SampleOne.class);
-		assertEquals(3, fields.size());
-	}
-
-	@Test
-	public void testGetFields_NoFieldsOnClass() {
-		HashSet<Field> fields = ReflectionUtil.getFields(Empty.class);
-
-		// there are 0 fields in the object class
-		assertEquals(0, fields.size());
-	}
-
+	
 	@Test
 	public void testGetFieldValue() {
 		String expected = "foo";
@@ -129,4 +115,30 @@ public class ReflectionUtilTest {
 	 *	assertNull(value);
 	 *}
 	 */
+
+	@Test
+	public void testGetFields() {
+		HashSet<Field> fields = ReflectionUtil.getFields(SampleOne.class);
+		assertEquals(3, fields.size());
+	}
+
+	@Test
+	public void testGetFields_NoFieldsOnClass() {
+		HashSet<Field> fields = ReflectionUtil.getFields(Empty.class);
+
+		// there are 0 fields in the object class
+		assertEquals(0, fields.size());
+	}
+	
+	@Test
+	public void testGetFieldsWithFilter() {
+		HashSet<Field> fields = ReflectionUtil.getFields(SampleOne.class, ReflectionUtil.PUBLIC_FIELDS);
+		assertEquals(2, fields.size());
+	}
+	
+	@Test
+	public void testGetFieldsWithFilter_NullFilter() {
+		HashSet<Field> fields = ReflectionUtil.getFields(SampleOne.class, null);
+		assertEquals(0, fields.size());
+	}
 }
