@@ -56,8 +56,8 @@ public class ReflectionUtilTest {
 		HashSet<Method> methods = ReflectionUtil.getMethods(SampleOne.class);
 		HashSet<Method> parentMethods = ReflectionUtil.getMethods(Object.class);
 
-		assertEquals(16, methods.size());
-		assertEquals(4, methods.size() - parentMethods.size());
+		assertEquals(17, methods.size());
+		assertEquals(5, methods.size() - parentMethods.size());
 	}
 
 	@Test
@@ -69,10 +69,22 @@ public class ReflectionUtilTest {
 	}
 
 	@Test
+	public void testGetMethodsWithFilter() {
+		HashSet<Method> fields = ReflectionUtil.getMethods(SampleOne.class, ReflectionUtil.PUBLIC_METHODS);
+		assertEquals(13, fields.size());
+	}
+
+	@Test
+	public void testGetMethodsWithFilter_NullFilter() {
+		HashSet<Method> fields = ReflectionUtil.getMethods(SampleOne.class, null);
+		assertEquals(0, fields.size());
+	}
+
+	@Test
 	public void testGetField() throws IllegalArgumentException, IllegalAccessException {
 		Field field = ReflectionUtil.getField(SampleOne.class, "field1");
 		assertNotNull(field);
-		
+
 		String example = "foo";
 		SampleOne sample = new SampleOne();
 		sample.field1 = example;
@@ -80,7 +92,7 @@ public class ReflectionUtilTest {
 		String value = (String) field.get(sample);
 		assertEquals(example, value);
 	}
-	
+
 	@Test
 	public void testGetFieldValue() {
 		String expected = "foo";
@@ -129,13 +141,13 @@ public class ReflectionUtilTest {
 		// there are 0 fields in the object class
 		assertEquals(0, fields.size());
 	}
-	
+
 	@Test
 	public void testGetFieldsWithFilter() {
 		HashSet<Field> fields = ReflectionUtil.getFields(SampleOne.class, ReflectionUtil.PUBLIC_FIELDS);
 		assertEquals(2, fields.size());
 	}
-	
+
 	@Test
 	public void testGetFieldsWithFilter_NullFilter() {
 		HashSet<Field> fields = ReflectionUtil.getFields(SampleOne.class, null);

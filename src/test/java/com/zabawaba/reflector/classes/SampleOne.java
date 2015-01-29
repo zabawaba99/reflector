@@ -10,4 +10,5 @@ public class SampleOne {
 	public void method2(){}
 	public int override(String param){return 1;}
 	public int override(String param, String param2){ return 2;}
+	protected void notPublic(){}
 }
