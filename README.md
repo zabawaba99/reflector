@@ -2,6 +2,7 @@
 ---
 [![Build Status](https://travis-ci.org/zabawaba99/reflector.svg?branch=master)](https://travis-ci.org/zabawaba99/reflector)
 [![Coverage Status](https://coveralls.io/repos/zabawaba99/reflector/badge.svg?branch=master)](https://coveralls.io/r/zabawaba99/reflector?branch=master)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.zabawaba99/reflector/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/com.github.zabawaba99/reflector)
 
 ---
 
@@ -38,7 +39,10 @@ Add the snapshot repository and the dependency to you pom.xml file
 
 ### Gradle
 
-Coming soon
+```xml
+compile 'com.github.zabawaba99:reflector:0.1.0'
+```
+
 
 ### Manual install
 
