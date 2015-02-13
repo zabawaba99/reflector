@@ -10,7 +10,7 @@ public class Fields {
 			return true;
 		}
 	};
-	
+
 	/**
 	 * Predefined {@link Filter} where {@link Filter#apply(Object)} will return
 	 * true when given a field who's {@link Modifier}s contain
@@ -21,7 +21,43 @@ public class Fields {
 			return (field.getModifiers() & Modifier.PUBLIC) == Modifier.PUBLIC;
 		}
 	};
-	
+
+	private Object obj;
+
+	private Fields(Object obj) {
+		this.obj = obj;
+	}
+
+	/**
+	 * Get a field that has the given name
+	 * 
+	 * @param fieldName
+	 *            The name of the field to look for
+	 * @return The field that has the given name
+	 * 
+	 * @throws NoSuchFieldException
+	 *             If no field exists with the provided name
+	 */
+	public ReflectorField get(String fieldName) throws NoSuchFieldException {
+		Field field = getField(obj.getClass(), fieldName);
+		if (field == null) {
+			throw new NoSuchFieldException(fieldName);
+		}
+		return new ReflectorField(obj, field);
+	}
+
+	/**
+	 * Builds a new Fields object with context of the object you want to Reflect
+	 * over
+	 * 
+	 * @param obj
+	 *            The object whos fields you want to Reflect over
+	 * @return A newly created Fields object
+	 */
+	public static Fields forObj(Object obj) {
+		return new Fields(obj);
+	}
+
 	/**
 	 * Get a field with the specified name in the given class
 	 * 
