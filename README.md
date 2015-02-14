@@ -1,4 +1,4 @@
-# Reflector
+# <img src="logo.jpg" width="30px" height="30px" /> Reflector
 ---
 [![Build Status](https://travis-ci.org/zabawaba99/reflector.svg?branch=master)](https://travis-ci.org/zabawaba99/reflector)
 [![Coverage Status](https://coveralls.io/repos/zabawaba99/reflector/badge.svg?branch=master)](https://coveralls.io/r/zabawaba99/reflector?branch=master)
@@ -59,8 +59,9 @@ package com.example
 import com.zabawaba.reflector;
 
 public static void main(String[] args){
-	HashSet<Methods> methods = ReflectionUtil.getMethods(Foo.class);
-	// ... do something with the set of methods 
+	SomeObject obj = new SomeObject();
+	Object fieldValue = Fields.forObj(obj).get("foo").getValue();
+	// ... do something with the field's value
 }
 ```
 
