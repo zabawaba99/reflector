@@ -3,6 +3,7 @@ package com.zabawaba.reflector;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
 import java.lang.reflect.Field;
 import java.util.HashSet;
@@ -13,6 +14,28 @@ import com.zabawaba.reflector.classes.Empty;
 import com.zabawaba.reflector.classes.SampleOne;
 
 public class FieldsTest {
+	
+	@Test
+	public void testGet() throws NoSuchFieldException {
+		SampleOne sample = new SampleOne();
+		ReflectorField field = Fields.forObj(sample).get("field1");
+		assertNotNull(field);
+	}
+	
+	@Test(expected=NoSuchFieldException.class)
+	public void testGet_MissingField() throws NoSuchFieldException {
+		SampleOne sample = new SampleOne();
+		Fields.forObj(sample).get("i_don't_exist");
+		fail("should have through exception");
+	}
+	
+	@Test
+	public void testForObj() {
+		SampleOne sample = new SampleOne();
+		Fields f = Fields.forObj(sample);
+		assertNotNull(f);
+	}
+	
 	@Test
 	public void testGetField() throws IllegalArgumentException, IllegalAccessException {
 		Field field = Fields.getField(SampleOne.class, "field1");
