@@ -51,11 +51,12 @@ public class ReflectorField {
 	 *         false otherwise
 	 */
 	public boolean valueEquals(Object obj) {
+		Object fieldValue = getValue();
 		if (obj != null) {
 			// if object is not null, check if equal
-			return obj.equals(this.obj);
+			return obj.equals(fieldValue);
 		}
 		// else they both can be null
-		return obj == null && this.obj == null;
+		return obj == null && fieldValue == null;
 	}
 }
