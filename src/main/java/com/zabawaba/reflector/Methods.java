@@ -1,6 +1,5 @@
 package com.zabawaba.reflector;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
@@ -26,10 +25,45 @@ public class Methods {
 
 	
 	private static Filter<Method> ALL_METHODS = new Filter<Method>() {
-		public boolean apply(Method field) {
+		public boolean apply(Method method) {
 			return true;
 		}
 	};
+	
+	private Object obj;
+	private Methods(Object obj) {
+		this.obj = obj;
+	}
+
+	/**
+	 * Get a method that has the given name
+	 * 
+	 * @param methodName
+	 *            The name of the method to look for
+	 * @return The method that has the given name
+	 * 
+	 * @throws NoSuchMethodException
+	 *             If no method exists with the provided name
+	 */
+	public ReflectorMethod get(String methodName) throws NoSuchMethodException {
+		Method method = getMethod(obj.getClass(), methodName);
+		if (method == null) {
+			throw new NoSuchMethodException(methodName);
+		}
+		return new ReflectorMethod(obj, method);
+	}
+
+	/**
+	 * Builds a new Methods object with context of the object you want to Reflect
+	 * over
+	 * 
+	 * @param obj
+	 *            The object whos methods you want to Reflect over
+	 * @return A newly created Methods object
+	 */
+	public static Methods forObj(Object obj) {
+		return new Methods(obj);
+	}
 
 	/**
 	 * Get a method with the given name in the given class. If the method you
@@ -103,7 +137,7 @@ public class Methods {
 	 *         criteria. <br>
 	 * <br>
 	 *         All of the methods returned have had
-	 *         {@link Field#setAccessible(boolean)} called on them.
+	 *         {@link Method#setAccessible(boolean)} called on them.
 	 */
 	public static HashSet<Method> getMethods(Class<?> clazz, Filter<Method> filter) {
 		HashSet<Method> methods = new HashSet<Method>();
