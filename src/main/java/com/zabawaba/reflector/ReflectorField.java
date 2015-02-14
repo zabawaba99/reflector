@@ -35,9 +35,7 @@ public class ReflectorField {
 		try {
 			return field.get(this.obj);
 		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
 		} catch (IllegalAccessException e) {
-			e.printStackTrace();
 		}
 		return null;
 	}

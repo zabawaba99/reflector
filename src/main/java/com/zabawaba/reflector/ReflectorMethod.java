@@ -38,7 +38,6 @@ public class ReflectorMethod {
 		try {
 			return method.invoke(obj, params);
 		} catch (IllegalAccessException e) {
-			e.printStackTrace();
 		}
 		return null;
 	}
