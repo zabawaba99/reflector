@@ -48,13 +48,13 @@ public class FieldsTest {
 	 */
 
 	@Test
-	public void testGetFields() {
+	public void testList() {
 		HashSet<ReflectorField> fields = Fields.forObj(new SampleOne()).list();
 		assertEquals(3, fields.size());
 	}
 
 	@Test
-	public void testGetFields_NoFieldsOnClass() {
+	public void testList_NoFieldsOnClass() {
 		HashSet<ReflectorField> fields = Fields.forObj(new Empty()).list();
 
 		// there are 0 fields in the object class
@@ -62,13 +62,13 @@ public class FieldsTest {
 	}
 
 	@Test
-	public void testGetFieldsWithFilter() {
+	public void testListWithFilter() {
 		HashSet<ReflectorField> fields = Fields.forObj(new SampleOne()).list(Fields.PUBLIC_FIELDS);
 		assertEquals(2, fields.size());
 	}
 
 	@Test
-	public void testGetFieldsWithFilter_NullFilter() {
+	public void tesListWithFilter_NullFilter() {
 		HashSet<ReflectorField> fields = Fields.forObj(new SampleOne()).list(null);
 		assertEquals(3, fields.size());
 	}
