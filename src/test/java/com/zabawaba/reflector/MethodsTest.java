@@ -8,7 +8,6 @@ import java.util.HashSet;
 
 import org.junit.Test;
 
-import com.zabawaba.reflector.classes.Empty;
 import com.zabawaba.reflector.classes.SampleOne;
 
 public class MethodsTest {

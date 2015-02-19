@@ -1,9 +1,13 @@
 package com.zabawaba.reflector;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.HashSet;
 
 import org.junit.Test;
@@ -33,19 +37,6 @@ public class FieldsTest {
 		Fields f = Fields.forObj(sample);
 		assertNotNull(f);
 	}
-	
-	/*
-	 * TODO: figure out why this test messes up cobertura reporting
-	 * 
-	 * @Test
-	 * public void testGetFieldValue_SecurityManager() {
-	 *	SampleOne sample = new SampleOne();
-	 *	System.err.close();
-	 *	System.setSecurityManager(new SecurityManager());
-	 *	Object value = ReflectionUtil.getFieldValue(sample, "field3");
-	 *	assertNull(value);
-	 *}
-	 */
 
 	@Test
 	public void testList() {
@@ -63,13 +54,61 @@ public class FieldsTest {
 
 	@Test
 	public void testListWithFilter() {
-		HashSet<ReflectorField> fields = Fields.forObj(new SampleOne()).list(Fields.PUBLIC_FIELDS);
-		assertEquals(2, fields.size());
+		HashSet<ReflectorField> fields = Fields.forObj(new SampleOne()).list(Fields.thatArePublic());
+		assertEquals(1, fields.size());
 	}
 
 	@Test
 	public void tesListWithFilter_NullFilter() {
 		HashSet<ReflectorField> fields = Fields.forObj(new SampleOne()).list(null);
 		assertEquals(3, fields.size());
+	}
+	
+	@Test
+	public void testPublicFieldFilter() throws NoSuchFieldException, SecurityException {
+		Field field = SampleOne.class.getField("field1");
+		Filter<Field> f = Fields.thatArePublic();
+		assertTrue(f.apply(field));	
+	}
+	
+	@Test
+	public void testProtecedFieldFilter() throws NoSuchFieldException, SecurityException {
+		Field field = SampleOne.class.getDeclaredField("field2");
+		Filter<Field> f = Fields.thatAreProtected();
+		assertTrue(f.apply(field));	
+	}
+	
+	@Test
+	public void testPrivateFieldFilter() throws NoSuchFieldException, SecurityException {
+		Field field = SampleOne.class.getDeclaredField("field3");
+		Filter<Field> f = Fields.thatArePrivate();
+		assertTrue(f.apply(field));	
+	}
+	
+	@Test
+	public void testModifierFieldFilter() throws NoSuchFieldException, SecurityException {
+		Field validField = SampleOne.class.getDeclaredField("field2");
+		Field invalidField = SampleOne.class.getDeclaredField("field3");
+		Filter<Field> f = Fields.thatHaveModifiers(Modifier.VOLATILE, Modifier.PROTECTED);
+		assertTrue(f.apply(validField));
+		assertFalse(f.apply(invalidField));
+	}
+	
+	@Test
+	public void testPrefixFilter() throws NoSuchFieldException, SecurityException {
+		Field validField = SampleOne.class.getDeclaredField("field3");
+		Field invalidField = SampleOne.class.getDeclaredField("field1");
+		Filter<Field> f = Fields.thatStartWith("field3");
+		assertTrue(f.apply(validField));	
+		assertFalse(f.apply(invalidField));
+	}
+	
+	@Test
+	public void testSuffixFilter() throws NoSuchFieldException, SecurityException {
+		Field validField = SampleOne.class.getDeclaredField("field3");
+		Field invalidField= SampleOne.class.getDeclaredField("field1");
+		Filter<Field> f = Fields.thatEndWith("3");
+		assertTrue(f.apply(validField));	
+		assertFalse(f.apply(invalidField));
 	}
 }

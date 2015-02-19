@@ -2,9 +2,9 @@ package com.zabawaba.reflector.classes;
 
 public class SampleOne {
 	public String field1;
-	public int field2;
+	protected volatile int field2;
 	@SuppressWarnings("unused")
-	private float field3;
+	private volatile float field3;
 
 	public String method1(){return field1;}
 	public void method2(){}
