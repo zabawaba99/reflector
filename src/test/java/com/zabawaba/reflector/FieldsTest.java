@@ -95,7 +95,7 @@ public class FieldsTest {
 	}
 	
 	@Test
-	public void testPrefixFilter() throws NoSuchFieldException, SecurityException {
+	public void testFieldPrefixFilter() throws NoSuchFieldException, SecurityException {
 		Field validField = SampleOne.class.getDeclaredField("field3");
 		Field invalidField = SampleOne.class.getDeclaredField("field1");
 		Filter<Field> f = Fields.thatStartWith("field3");
@@ -104,7 +104,7 @@ public class FieldsTest {
 	}
 	
 	@Test
-	public void testSuffixFilter() throws NoSuchFieldException, SecurityException {
+	public void testFieldSuffixFilter() throws NoSuchFieldException, SecurityException {
 		Field validField = SampleOne.class.getDeclaredField("field3");
 		Field invalidField= SampleOne.class.getDeclaredField("field1");
 		Filter<Field> f = Fields.thatEndWith("3");

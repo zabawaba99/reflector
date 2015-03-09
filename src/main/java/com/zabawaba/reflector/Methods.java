@@ -109,4 +109,74 @@ public class Methods {
 	public static Methods forObj(Object obj) {
 		return new Methods(obj);
 	}
+	
+	/**
+	 * @return a {@link Filter} where {@link Filter#apply(Object)} will return
+	 * true for any public methods
+	 */
+	public static Filter<Method> thatArePublic() {
+		return thatHaveModifiers(Modifier.PUBLIC);
+	}
+	
+	/**
+	 * @return a {@link Filter} where {@link Filter#apply(Object)} will return
+	 * true for any protected methods
+	 */
+	public static Filter<Method> thatAreProtected() {
+		return thatHaveModifiers(Modifier.PROTECTED);
+	}
+	
+	/**
+	 * @return a {@link Filter} where {@link Filter#apply(Object)} will return
+	 * true for any private methods
+	 */
+	public static Filter<Method> thatArePrivate() {
+		return thatHaveModifiers(Modifier.PRIVATE);
+	}
+	
+	/**
+	 * 
+	 * @param modifiers Modifiers that a method should have. See {@link Modifier}
+	 * @return a {@link Filter} where {@link Filter#apply(Object)} will return
+	 * true for any method that has all of the provided modifiers
+	 */
+	public static Filter<Method> thatHaveModifiers(final int... modifiers) {
+		return new Filter<Method>() {
+			public boolean apply(Method method) {
+				boolean valid = true;
+				for(int modifier:modifiers){
+					valid &= (method.getModifiers() & modifier) == modifier;
+				}
+				return valid;
+			}
+		};
+	}
+	
+	/**
+	 * 
+	 * @param prefix The string that a method's name should start with
+	 * @return a {@link Filter} where {@link Filter#apply(Object)} will return
+	 * true for any method who's name starts with the given prefix
+	 */
+	public static Filter<Method> thatStartWith(final String prefix) {
+		return new Filter<Method>(){
+			public boolean apply(Method method) {
+				return method.getName().startsWith(prefix);
+			}
+		};
+	}
+	
+	/**
+	 * 
+	 * @param suffix The string that a method's name should start with
+	 * @return a {@link Filter} where {@link Filter#apply(Object)} will return
+	 * true for any method who's name ends with the given suffix
+	 */
+	public static Filter<Method> thatEndWith(final String suffix) {
+		return new Filter<Method>(){
+			public boolean apply(Method method) {
+				return method.getName().endsWith(suffix);
+			}
+		};
+	}
 }
