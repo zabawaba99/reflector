@@ -22,14 +22,14 @@ public class Methods {
 		}
 	};
 
-	
 	private static Filter<Method> ALL_METHODS = new Filter<Method>() {
 		public boolean apply(Method method) {
 			return true;
 		}
 	};
-	
+
 	private Object obj;
+
 	private Methods(Object obj) {
 		this.obj = obj;
 	}
@@ -46,8 +46,8 @@ public class Methods {
 	 */
 	public ReflectorMethod get(String methodName) throws NoSuchMethodException {
 		ReflectorMethod method = null;
-		for(ReflectorMethod m:list()){
-			if (m.getMethod().getName().equals(methodName)){
+		for (ReflectorMethod m : list()) {
+			if (m.getMethod().getName().equals(methodName)) {
 				method = m;
 			}
 		}
@@ -97,10 +97,10 @@ public class Methods {
 		}
 		return methods;
 	}
-	
+
 	/**
-	 * Builds a new Methods object with context of the object you want to Reflect
-	 * over
+	 * Builds a new Methods object with context of the object you want to
+	 * Reflect over
 	 * 
 	 * @param obj
 	 *            The object whos methods you want to Reflect over
@@ -109,71 +109,74 @@ public class Methods {
 	public static Methods forObj(Object obj) {
 		return new Methods(obj);
 	}
-	
+
 	/**
 	 * @return a {@link Filter} where {@link Filter#apply(Object)} will return
-	 * true for any public methods
+	 *         true for any public methods
 	 */
 	public static Filter<Method> thatArePublic() {
 		return thatHaveModifiers(Modifier.PUBLIC);
 	}
-	
+
 	/**
 	 * @return a {@link Filter} where {@link Filter#apply(Object)} will return
-	 * true for any protected methods
+	 *         true for any protected methods
 	 */
 	public static Filter<Method> thatAreProtected() {
 		return thatHaveModifiers(Modifier.PROTECTED);
 	}
-	
+
 	/**
 	 * @return a {@link Filter} where {@link Filter#apply(Object)} will return
-	 * true for any private methods
+	 *         true for any private methods
 	 */
 	public static Filter<Method> thatArePrivate() {
 		return thatHaveModifiers(Modifier.PRIVATE);
 	}
-	
+
 	/**
 	 * 
-	 * @param modifiers Modifiers that a method should have. See {@link Modifier}
+	 * @param modifiers
+	 *            Modifiers that a method should have. See {@link Modifier}
 	 * @return a {@link Filter} where {@link Filter#apply(Object)} will return
-	 * true for any method that has all of the provided modifiers
+	 *         true for any method that has all of the provided modifiers
 	 */
 	public static Filter<Method> thatHaveModifiers(final int... modifiers) {
 		return new Filter<Method>() {
 			public boolean apply(Method method) {
 				boolean valid = true;
-				for(int modifier:modifiers){
+				for (int modifier : modifiers) {
 					valid &= (method.getModifiers() & modifier) == modifier;
 				}
 				return valid;
 			}
 		};
 	}
-	
+
 	/**
 	 * 
-	 * @param prefix The string that a method's name should start with
+	 * @param prefix
+	 *            The string that a method's name should start with
 	 * @return a {@link Filter} where {@link Filter#apply(Object)} will return
-	 * true for any method who's name starts with the given prefix
+	 *         true for any method who's name starts with the given prefix
 	 */
 	public static Filter<Method> thatStartWith(final String prefix) {
-		return new Filter<Method>(){
+		return new Filter<Method>() {
 			public boolean apply(Method method) {
 				return method.getName().startsWith(prefix);
 			}
 		};
 	}
-	
+
 	/**
 	 * 
-	 * @param suffix The string that a method's name should start with
+	 * @param suffix
+	 *            The string that a method's name should start with
 	 * @return a {@link Filter} where {@link Filter#apply(Object)} will return
-	 * true for any method who's name ends with the given suffix
+	 *         true for any method who's name ends with the given suffix
 	 */
 	public static Filter<Method> thatEndWith(final String suffix) {
-		return new Filter<Method>(){
+		return new Filter<Method>() {
 			public boolean apply(Method method) {
 				return method.getName().endsWith(suffix);
 			}

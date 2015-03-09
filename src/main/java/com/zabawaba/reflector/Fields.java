@@ -101,71 +101,74 @@ public class Fields {
 	public static Fields forObj(Object obj) {
 		return new Fields(obj);
 	}
-	
+
 	/**
 	 * @return a {@link Filter} where {@link Filter#apply(Object)} will return
-	 * true for any public fields
+	 *         true for any public fields
 	 */
 	public static Filter<Field> thatArePublic() {
 		return thatHaveModifiers(Modifier.PUBLIC);
 	}
-	
+
 	/**
 	 * @return a {@link Filter} where {@link Filter#apply(Object)} will return
-	 * true for any protected fields
+	 *         true for any protected fields
 	 */
 	public static Filter<Field> thatAreProtected() {
 		return thatHaveModifiers(Modifier.PROTECTED);
 	}
-	
+
 	/**
 	 * @return a {@link Filter} where {@link Filter#apply(Object)} will return
-	 * true for any private fields
+	 *         true for any private fields
 	 */
 	public static Filter<Field> thatArePrivate() {
 		return thatHaveModifiers(Modifier.PRIVATE);
 	}
-	
+
 	/**
 	 * 
-	 * @param modifiers Modifiers that a field should have. See {@link Modifier}
+	 * @param modifiers
+	 *            Modifiers that a field should have. See {@link Modifier}
 	 * @return a {@link Filter} where {@link Filter#apply(Object)} will return
-	 * true for any field that has all of the provided modifiers
+	 *         true for any field that has all of the provided modifiers
 	 */
 	public static Filter<Field> thatHaveModifiers(final int... modifiers) {
 		return new Filter<Field>() {
 			public boolean apply(Field field) {
 				boolean valid = true;
-				for(int modifier:modifiers){
+				for (int modifier : modifiers) {
 					valid &= (field.getModifiers() & modifier) == modifier;
 				}
 				return valid;
 			}
 		};
 	}
-	
+
 	/**
 	 * 
-	 * @param prefix The string that a field's name should start with
+	 * @param prefix
+	 *            The string that a field's name should start with
 	 * @return a {@link Filter} where {@link Filter#apply(Object)} will return
-	 * true for any field who's name starts with the given prefix
+	 *         true for any field who's name starts with the given prefix
 	 */
 	public static Filter<Field> thatStartWith(final String prefix) {
-		return new Filter<Field>(){
+		return new Filter<Field>() {
 			public boolean apply(Field field) {
 				return field.getName().startsWith(prefix);
 			}
 		};
 	}
-	
+
 	/**
 	 * 
-	 * @param suffix The string that a field's name should start with
+	 * @param suffix
+	 *            The string that a field's name should start with
 	 * @return a {@link Filter} where {@link Filter#apply(Object)} will return
-	 * true for any field who's name ends with the given suffix
+	 *         true for any field who's name ends with the given suffix
 	 */
 	public static Filter<Field> thatEndWith(final String suffix) {
-		return new Filter<Field>(){
+		return new Filter<Field>() {
 			public boolean apply(Field field) {
 				return field.getName().endsWith(suffix);
 			}

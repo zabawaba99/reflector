@@ -12,11 +12,11 @@ import org.junit.Test;
 import com.zabawaba.reflector.classes.SampleOne;
 
 public class ReflectorMethodTest {
-	
+
 	private SampleOne sample;
 	private String expected;
 	private Method method;
-	
+
 	@Before
 	public void setup() throws NoSuchMethodException, SecurityException {
 		sample = new SampleOne();
@@ -25,19 +25,19 @@ public class ReflectorMethodTest {
 	}
 
 	@Test
-	public void testGetMethod(){
+	public void testGetMethod() {
 		ReflectorMethod rMethod = new ReflectorMethod(sample, method);
 		assertEquals(method, rMethod.getMethod());
 	}
-	
+
 	@Test
 	public void testCall() throws InvocationTargetException, IllegalAccessException {
 		sample.field1 = expected;
-		
+
 		ReflectorMethod rMethod = new ReflectorMethod(sample, method);
 		assertEquals(expected, rMethod.call());
 	}
-	
+
 	@Test
 	public void testCall_IllegalAccess() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, SecurityException {
 		sample.field1 = expected;
@@ -45,16 +45,16 @@ public class ReflectorMethodTest {
 		ReflectorMethod rMethod = new ReflectorMethod(sample, method);
 		assertEquals(null, rMethod.call());
 	}
-	
-	@Test(expected=IllegalArgumentException.class)
+
+	@Test(expected = IllegalArgumentException.class)
 	public void testCall_IllegalArgument() throws InvocationTargetException, IllegalAccessException {
 		sample.field1 = expected;
-		
+
 		new ReflectorMethod(sample, method).call("foo");
 		fail("should have failed");
 	}
-	
-	@Test(expected=InvocationTargetException.class)
+
+	@Test(expected = InvocationTargetException.class)
 	public void testCall_InvocationTarget() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, SecurityException {
 		sample.field1 = expected;
 		method = SampleOne.class.getMethod("blowup");
