@@ -6,7 +6,8 @@ import java.lang.reflect.Method;
 /**
  * Wraps {@link Method} and provides some utility methods
  * 
- * @author zabawaba99
+ * @author Steven Berlanga
+ * @since 0.2.0
  */
 public class ReflectorMethod {
 	private Object obj;

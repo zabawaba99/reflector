@@ -5,7 +5,8 @@ import java.lang.reflect.Field;
 /**
  * Wraps {@link Field} and provides some utility methods
  * 
- * @author zabawaba99
+ * @author Steven Berlanga
+ * @since 0.2.0
  */
 public class ReflectorField {
 	private Object obj;

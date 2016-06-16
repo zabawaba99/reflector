@@ -5,7 +5,8 @@ package com.zabawaba.reflector;
  * PublicFieldFilter might implement Filter<Field>, and return true for any
  * field who's modifiers contain 'public'.
  * 
- * @author zabawaba
+ * @author Steven Berlanga
+ * @since 0.2.0
  */
 public interface Filter<T> {
 	/**

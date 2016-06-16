@@ -6,7 +6,8 @@ import java.util.HashSet;
 /**
  * Provides a set of methods to manipulate {@link Constructor}
  *
- * @author zabawaba
+ * @author Steven Berlanga
+ * @since 0.2.1
  */
 public class Constructors {
 

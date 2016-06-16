@@ -3,6 +3,12 @@ package com.zabawaba.reflector;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+/**
+ * Wraps {@link Constructor} and provides some utility methods
+ *
+ * @author Steven Berlanga
+ * @since 0.2.0
+ */
 public class ReflectorConstructor {
 
 	private Object obj;

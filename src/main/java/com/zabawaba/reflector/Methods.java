@@ -7,7 +7,8 @@ import java.util.HashSet;
 /**
  * A utility that provides a different interface for reflection.
  * 
- * @author zabawaba
+ * @author Steven Berlanga
+ * @since 0.2.0
  */
 public class Methods {
 
