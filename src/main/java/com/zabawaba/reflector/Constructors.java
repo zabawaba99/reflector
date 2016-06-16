@@ -19,7 +19,7 @@ public class Constructors {
 
 	private Object obj;
 
-	public Constructors(Object obj) {
+	private Constructors(Object obj) {
 		this.obj = obj;
 	}
 
