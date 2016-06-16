@@ -1,6 +1,7 @@
 package com.zabawaba.reflector;
 
 import java.lang.reflect.Constructor;
+import java.util.Arrays;
 import java.util.HashSet;
 
 /**
@@ -24,25 +25,33 @@ public class Constructors {
 	}
 
 	/**
-	 * Get a constructor that has the given name
-	 *
-	 * @param constructorName
-	 *            The name of the constructor to look for
-	 * @return The constructor that has the given name
+	 * @return The default constructor of the class.
 	 *
 	 * @throws NoSuchMethodException
-	 *             If no constructor exists with the provided name
+	 *             If no default constructor is declared on the class.
 	 */
-	public ReflectorConstructor get(String constructorName) throws NoSuchMethodException {
+	public ReflectorConstructor get() throws NoSuchMethodException {
+		return get(new Class[0]);
+	}
+
+	/**
+	 * Finds a constructor that matches the specified parameterTypes. Private, public and package proected
+	 * constructors will be returned.
+	 *
+	 * @param parameterTypes the parameter types for the constructor to find.
+	 * @return the constructor object that matches the specified parameterTypes
+	 * @throws NoSuchMethodException
+	 * 				If there is no constructor with the given parameter list.
+	 */
+	public ReflectorConstructor get(Class<?>... parameterTypes) throws NoSuchMethodException {
 		ReflectorConstructor constructor = null;
 		for (ReflectorConstructor c : list()) {
-			String className = c.getConstructor().getDeclaringClass().getSimpleName();
-			if (className.equals(constructorName)) {
+			if (Arrays.deepEquals(parameterTypes, c.getConstructor().getParameterTypes())) {
 				constructor = c;
 			}
 		}
 		if (constructor == null) {
-			throw new NoSuchMethodException(constructorName);
+			throw new NoSuchMethodException("<init>");
 		}
 		return constructor;
 	}
@@ -75,15 +84,11 @@ public class Constructors {
 			filter = ALL_CONSTRUCTORS;
 		}
 
-		Class<?> currentClass = obj.getClass();
-		while (currentClass != null) {
-			for (Constructor<?> c : currentClass.getDeclaredConstructors()) {
-				c.setAccessible(true);
-				if (filter.apply(c)) {
-					constructors.add(new ReflectorConstructor(obj, c));
-				}
+		for (Constructor<?> c : obj.getClass().getDeclaredConstructors()) {
+			c.setAccessible(true);
+			if (filter.apply(c)) {
+				constructors.add(new ReflectorConstructor(obj, c));
 			}
-			currentClass = currentClass.getSuperclass();
 		}
 		return constructors;
 	}
