@@ -1,15 +1,14 @@
 package com.zabawaba.reflector;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import com.zabawaba.reflector.classes.SampleOne;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import com.zabawaba.reflector.classes.SampleOne;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class ReflectorConstructorTest {
 
@@ -21,7 +20,7 @@ public class ReflectorConstructorTest {
 	public void setup() throws NoSuchMethodException, SecurityException {
 		sample = new SampleOne();
 		expected = "foobar";
-		constructor = SampleOne.class.getConstructor(SampleOne.class);
+		constructor = SampleOne.class.getConstructor();
 	}
 
 	@Test
