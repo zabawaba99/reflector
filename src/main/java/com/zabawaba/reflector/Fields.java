@@ -7,7 +7,8 @@ import java.util.HashSet;
 /**
  * Provides a set methods to access and manipulate {@link Field}s
  * 
- * @author zabawaba
+ * @author Steven Berlanga
+ * @since 0.2.0
  */
 public class Fields {
 	private static Filter<Field> ALL_FIELDS = new Filter<Field>() {
