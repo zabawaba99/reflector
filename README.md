@@ -32,7 +32,7 @@ Add the snapshot repository and the dependency to you pom.xml file
 	<dependency>
 		<groupId>com.zabawaba99</groupId>
 		<artifactId>reflector</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>0.2.0-SNAPSHOT</version>
 	</dependency>
 </dependencies>
 ```
@@ -40,7 +40,7 @@ Add the snapshot repository and the dependency to you pom.xml file
 ### Gradle
 
 ```xml
-compile 'com.github.zabawaba99:reflector:0.1.0'
+compile 'com.github.zabawaba99:reflector:0.2.0'
 ```
 
 
